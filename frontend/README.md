@@ -35,11 +35,3 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-
-<!-- app/
-├── actions/           # Server Actions
-├── components/        # Client Components
-├── dashboard/         # Dashboard page (Server Component)
-├── page.tsx          # Home/Login page (Server Component)
-├── layout.tsx        # Root layout
-└── globals.css       # Tailwind styles -->

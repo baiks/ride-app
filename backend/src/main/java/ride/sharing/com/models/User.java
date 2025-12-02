@@ -1,6 +1,7 @@
 package ride.sharing.com.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import ride.sharing.com.enums.DriverStatus;
 import ride.sharing.com.enums.Role;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @Data
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

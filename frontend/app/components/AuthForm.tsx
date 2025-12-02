@@ -35,7 +35,6 @@ export default function AuthForm() {
           });
           setTimeout(() => {
             router.push("/dashboard");
-            router.refresh();
           }, 1000);
         } else {
           toast.error(

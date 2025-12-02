@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api";
@@ -20,7 +19,8 @@ function formatValidationErrors(details: Record<string, string>): string {
 }
 
 export async function apiRequest(endpoint: string, options: RequestInit = {}) {
-  console.log("END Point:", `${API_BASE_URL}${endpoint}`);
+  console.log("End Point:", `${API_BASE_URL}${endpoint}`);
+  console.log("Env:", `${process.env.APP_ENV}`);
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
@@ -59,13 +59,6 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
     }
 
     if (!response.ok) {
-      // Handle 401 Unauthorized - clear session and redirect to login
-      if (response.status === 401) {
-        const cookieStore = await cookies();
-        cookieStore.delete("token");
-        redirect("/");
-      }
-
       // If we have error details from the backend, use them
       if (responseData) {
         const error: any = new Error(
@@ -118,7 +111,7 @@ export function handleApiError(error: any) {
   if (error.status === 401) {
     return {
       success: false,
-      error: "Session expired. Please login again.",
+      error: "Invalid credentials or Session expired. Please login again.",
       status: 401,
       shouldLogout: true,
     };
