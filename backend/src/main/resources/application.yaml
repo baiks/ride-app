@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: Ride-Sharing-System
+  profiles:
+    active: dev

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Paul Kimani
+      sqlFile:
+        path: db/changelog/V1__insert_sample_users.sql
+        relativeToChangelogFile: false
+        splitStatements: true
+        stripComments: true
