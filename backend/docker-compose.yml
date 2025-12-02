@@ -1,0 +1,26 @@
+services:
+
+  backend:
+    build:
+      context: .           
+      dockerfile: Dockerfile
+    image: baiks384/ridesharing-backend
+    container_name: ridesharing-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/ridesharing
+      SPRING_DATASOURCE_USERNAME: doadmin
+      #SPRING_DATASOURCE_PASSWORD: your-password-here
+      SPRING_DATASOURCE_HIKARI_AUTOCOMMIT: "true"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      SERVER_PORT: 8099
+      SPRING_SERVER_ADDRESS: 0.0.0.0
+      SPRING_DATA_REDIS_HOST: 46.101.32.120
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATASOURCE_DRIVERCLASSNAME: com.mysql.cj.jdbc.Driver
+      JWT_SECRET: Z2F0ZXdheWFwaTIwMjVXeXpRbU1jRGd6b1RYaEZ0Q0hYeXRCeGdRYkZvTnFRVmRZemlKT2p3a1NwRFRkTHg1Ug
+      JWT_EXPIRATION: 900000
+    ports:
+      - "8099:8099"
