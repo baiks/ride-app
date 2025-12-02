@@ -44,16 +44,18 @@ public class RideServiceImpl implements RideService {
             throw new RuntimeException("Only customers can request rides");
         }
 
-        Ride ride = new Ride();
-        ride.setCustomer(customer);
-        ride.setPickupLat(request.getPickupLat());
-        ride.setPickupLng(request.getPickupLng());
-        ride.setPickupAddress(request.getPickupAddress());
-        ride.setDropoffLat(request.getDropoffLat());
-        ride.setDropoffLng(request.getDropoffLng());
-        ride.setDropoffAddress(request.getDropoffAddress());
-        ride.setStatus(RideStatus.REQUESTED);
-        ride.setRequestedAt(LocalDateTime.now());
+        Ride ride = Ride.builder()
+                .customer(customer)
+                .pickupLat(request.getPickupLat())
+                .pickupLng(request.getPickupLng())
+                .pickupAddress(request.getPickupAddress())
+                .dropoffLat(request.getDropoffLat())
+                .dropoffLng(request.getDropoffLng())
+                .dropoffAddress(request.getDropoffAddress())
+                .status(RideStatus.REQUESTED)
+                .requestedAt(LocalDateTime.now())
+                .build();
+
 
         // Calculate estimated distance (simple Haversine formula could be used)
         double distance = calculateDistance(

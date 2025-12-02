@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ride.sharing.com.dtos.RideRequest;
 import ride.sharing.com.enums.DriverStatus;
 import ride.sharing.com.enums.RideStatus;
@@ -16,18 +16,14 @@ import ride.sharing.com.impl.RideServiceImpl;
 import ride.sharing.com.models.Ride;
 import ride.sharing.com.models.User;
 import ride.sharing.com.repositories.RideRepository;
-import ride.sharing.com.services.LocationService;
-import ride.sharing.com.services.MatchingService;
-import ride.sharing.com.services.UserService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class RideServiceImplTest {
 
     @Mock
@@ -110,7 +106,6 @@ class RideServiceImplTest {
     void requestRide_whenMatchingServiceFails_shouldCreateRideWithoutDriver() {
         when(userService.findById(customer.getId())).thenReturn(customer);
         when(matchingService.findNearestDriver(anyDouble(), anyDouble())).thenThrow(new RuntimeException("No drivers"));
-
         when(rideRepository.save(any(Ride.class))).thenAnswer(i -> i.getArguments()[0]);
 
         Ride createdRide = rideService.requestRide(customer.getId(), rideRequest);

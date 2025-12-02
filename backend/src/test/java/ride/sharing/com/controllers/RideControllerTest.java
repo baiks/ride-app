@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ride.sharing.com.dtos.RideRequest;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 class RideControllerTest {
 
     @Mock
@@ -51,18 +53,22 @@ class RideControllerTest {
         objectMapper.findAndRegisterModules(); // For LocalDateTime serialization
 
         // Setup test customer
-        testCustomer = new User();
-        testCustomer.setId(1L);
-        testCustomer.setEmail("customer@example.com");
-        testCustomer.setFirstName("John");
-        testCustomer.setLastName("Doe");
+        User testCustomer = User.builder()
+                .id(1L)
+                .email("customer@example.com")
+                .firstName("John")
+                .lastName("Doe")
+                .build();
+
 
         // Setup test driver
-        testDriver = new User();
-        testDriver.setId(2L);
-        testDriver.setEmail("driver@example.com");
-        testDriver.setFirstName("Jane");
-        testDriver.setLastName("Smith");
+        User testDriver = User.builder()
+                .id(2L)
+                .email("driver@example.com")
+                .firstName("Jane")
+                .lastName("Smith")
+                .build();
+
 
         // Setup test ride request
         testRideRequest = new RideRequest();
@@ -73,20 +79,21 @@ class RideControllerTest {
         testRideRequest.setPickupAddress("Nairobi CBD");
         testRideRequest.setDropoffAddress("Westlands");
 
-        // Setup test ride
-        testRide = new Ride();
-        testRide.setId(1L);
-        testRide.setCustomer(testCustomer);
-        testRide.setDriver(testDriver);
-        testRide.setPickupLat(-1.2921);
-        testRide.setPickupLng(36.8219);
-        testRide.setDropoffLat(-1.3000);
-        testRide.setDropoffLng(36.8300);
-        testRide.setPickupAddress("Nairobi CBD");
-        testRide.setDropoffAddress("Westlands");
-        testRide.setStatus(RideStatus.REQUESTED);
-        testRide.setFare(500.00);
-        testRide.setRequestedAt(LocalDateTime.now());
+        Ride testRide = Ride.builder()
+                .id(1L)
+                .customer(testCustomer)
+                .driver(testDriver)
+                .pickupLat(-1.2921)
+                .pickupLng(36.8219)
+                .dropoffLat(-1.3000)
+                .dropoffLng(36.8300)
+                .pickupAddress("Nairobi CBD")
+                .dropoffAddress("Westlands")
+                .status(RideStatus.REQUESTED)
+                .fare(500.00)
+                .requestedAt(LocalDateTime.now())
+                .build();
+
     }
 
     @Test
@@ -232,10 +239,12 @@ class RideControllerTest {
     void getCustomerRides_ShouldReturnRideList_WhenCustomerHasRides() throws Exception {
         // Arrange
         Long customerId = 1L;
-        Ride ride2 = new Ride();
-        ride2.setId(2L);
-        ride2.setCustomer(testCustomer);
-        ride2.setStatus(RideStatus.COMPLETED);
+        Ride ride2 = Ride.builder()
+                .id(2L)
+                .customer(testCustomer)
+                .status(RideStatus.COMPLETED)
+                .build();
+
 
         List<Ride> rides = Arrays.asList(testRide, ride2);
         when(rideService.getCustomerRides(customerId)).thenReturn(rides);
@@ -268,10 +277,12 @@ class RideControllerTest {
     void getDriverRides_ShouldReturnRideList_WhenDriverHasRides() throws Exception {
         // Arrange
         Long driverId = 2L;
-        Ride ride2 = new Ride();
-        ride2.setId(2L);
-        ride2.setDriver(testDriver);
-        ride2.setStatus(RideStatus.COMPLETED);
+        Ride ride2 = Ride.builder()
+                .id(2L)
+                .driver(testDriver)
+                .status(RideStatus.COMPLETED)
+                .build();
+
 
         List<Ride> rides = Arrays.asList(testRide, ride2);
         when(rideService.getDriverRides(driverId)).thenReturn(rides);
@@ -303,13 +314,15 @@ class RideControllerTest {
     @Test
     void getAllRides_ShouldReturnAllRides() throws Exception {
         // Arrange
-        Ride ride2 = new Ride();
-        ride2.setId(2L);
-        ride2.setStatus(RideStatus.COMPLETED);
+        Ride ride2 = Ride.builder()
+                .id(2L)
+                .status(RideStatus.COMPLETED)
+                .build();
 
-        Ride ride3 = new Ride();
-        ride3.setId(3L);
-        ride3.setStatus(RideStatus.IN_PROGRESS);
+        Ride ride3 = Ride.builder()
+                .id(3L)
+                .status(RideStatus.IN_PROGRESS)
+                .build();
 
         List<Ride> rides = Arrays.asList(testRide, ride2, ride3);
         when(rideService.getAllRides()).thenReturn(rides);

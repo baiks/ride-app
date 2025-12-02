@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.modelmapper.ModelMapper;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ride.sharing.com.dtos.UserDto;
 import ride.sharing.com.enums.DriverStatus;
 import ride.sharing.com.enums.Role;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
     @Mock
@@ -71,7 +71,7 @@ class UserServiceImplTest {
 
         assertThat(result.getEmail()).isEqualTo(createDto.getEmail());
         assertThat(result.getPassword()).isEqualTo("encodedPassword");
-        assertThat(result.getActive()).isFalse();  // Because role is DRIVER, active = false
+        assertThat(result.getActive()).isFalse(); // Because role is DRIVER
         assertThat(result.getDriverStatus()).isEqualTo(DriverStatus.OFFLINE);
         verify(userRepository).save(any(User.class));
     }

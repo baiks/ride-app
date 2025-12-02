@@ -14,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ride.sharing.com.dtos.UserDto;
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 class AuthControllerTest {
 
     @Mock
@@ -63,7 +66,7 @@ class AuthControllerTest {
         // Arrange
         UserDto.Create createDto = new UserDto.Create();
         createDto.setEmail("test@example.com");
-        createDto.setPassword("password123");
+        createDto.setPassword("Password@123");
         createDto.setFirstName("John");
         createDto.setLastName("Doe");
         createDto.setPhoneNumber("+1234567890");
@@ -100,7 +103,7 @@ class AuthControllerTest {
         // Arrange
         UserDto.Create createDto = new UserDto.Create();
         createDto.setEmail("invalid-email");
-        createDto.setPassword("password123");
+        createDto.setPassword("Password@123");
         createDto.setFirstName("John");
         createDto.setLastName("Doe");
 
@@ -118,7 +121,7 @@ class AuthControllerTest {
         // Arrange
         UserDto.Login loginDto = new UserDto.Login();
         loginDto.setEmail("test@example.com");
-        loginDto.setPassword("password123");
+        loginDto.setPassword("Password@123");
 
         Authentication authentication = mock(Authentication.class);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -192,10 +195,10 @@ class AuthControllerTest {
         // Arrange
         UserDto.Login loginDto = new UserDto.Login();
         loginDto.setEmail("nonexistent@example.com");
-        loginDto.setPassword("password123");
+        loginDto.setPassword("Password@123");
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new BadCredentialsException("User not found"));
+                .thenThrow(new UsernameNotFoundException("User not found with email: " + loginDto.getEmail()));
 
         // Act & Assert
         mockMvc.perform(post("/api/auth/login")
@@ -212,7 +215,7 @@ class AuthControllerTest {
         // Arrange
         UserDto.Create createDto = new UserDto.Create();
         createDto.setEmail("driver@example.com");
-        createDto.setPassword("password123");
+        createDto.setPassword("Password@123");
         createDto.setFirstName("Jane");
         createDto.setLastName("Driver");
         createDto.setPhoneNumber("+1234567890");
@@ -246,7 +249,7 @@ class AuthControllerTest {
         // Arrange
         UserDto.Create createDto = new UserDto.Create();
         createDto.setEmail("admin@example.com");
-        createDto.setPassword("password123");
+        createDto.setPassword("Passwor@d123");
         createDto.setFirstName("Admin");
         createDto.setLastName("User");
         createDto.setPhoneNumber("+1234567890");
